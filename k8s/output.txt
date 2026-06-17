@@ -1,0 +1,59 @@
+===================================================================
+ Kubernetes Multi-Container Deployment - Output Log
+ Generated: Thu, Jun 18, 2026  1:47:31 AM
+===================================================================
+
+$ kubectl get nodes
+NAME             STATUS   ROLES           AGE   VERSION
+docker-desktop   Ready    control-plane   11m   v1.34.1
+
+$ kubectl get pods -o wide
+NAME                        READY   STATUS    RESTARTS   AGE     IP          NODE             NOMINATED NODE   READINESS GATES
+backend-7c7f7cd67-g25g9     1/1     Running   0          9m25s   10.1.0.7    docker-desktop   <none>           <none>
+backend-7c7f7cd67-kg7jk     1/1     Running   0          9m25s   10.1.0.8    docker-desktop   <none>           <none>
+database-744c9b6c68-qskxp   1/1     Running   0          9m25s   10.1.0.6    docker-desktop   <none>           <none>
+frontend-7f67fff95c-6n9z9   1/1     Running   0          7m37s   10.1.0.13   docker-desktop   <none>           <none>
+frontend-7f67fff95c-9hhhh   1/1     Running   0          9m25s   10.1.0.9    docker-desktop   <none>           <none>
+frontend-7f67fff95c-c4sct   1/1     Running   0          7m37s   10.1.0.12   docker-desktop   <none>           <none>
+frontend-7f67fff95c-g4s9c   1/1     Running   0          7m37s   10.1.0.11   docker-desktop   <none>           <none>
+frontend-7f67fff95c-tqwqw   1/1     Running   0          9m25s   10.1.0.10   docker-desktop   <none>           <none>
+
+$ kubectl get deployments
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+backend    2/2     2            2           9m26s
+database   1/1     1            1           9m25s
+frontend   5/5     5            5           9m25s
+
+$ kubectl get services
+NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+backend      ClusterIP   10.100.163.198   <none>        5000/TCP       9m27s
+database     ClusterIP   10.104.32.180    <none>        5432/TCP       9m26s
+frontend     NodePort    10.106.125.170   <none>        80:30080/TCP   9m26s
+kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP        11m
+
+$ kubectl get all
+NAME                            READY   STATUS    RESTARTS   AGE
+pod/backend-7c7f7cd67-g25g9     1/1     Running   0          9m26s
+pod/backend-7c7f7cd67-kg7jk     1/1     Running   0          9m26s
+pod/database-744c9b6c68-qskxp   1/1     Running   0          9m26s
+pod/frontend-7f67fff95c-6n9z9   1/1     Running   0          7m38s
+pod/frontend-7f67fff95c-9hhhh   1/1     Running   0          9m26s
+pod/frontend-7f67fff95c-c4sct   1/1     Running   0          7m38s
+pod/frontend-7f67fff95c-g4s9c   1/1     Running   0          7m38s
+pod/frontend-7f67fff95c-tqwqw   1/1     Running   0          9m26s
+
+NAME                 TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+service/backend      ClusterIP   10.100.163.198   <none>        5000/TCP       9m27s
+service/database     ClusterIP   10.104.32.180    <none>        5432/TCP       9m26s
+service/frontend     NodePort    10.106.125.170   <none>        80:30080/TCP   9m26s
+service/kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP        11m
+
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/backend    2/2     2            2           9m27s
+deployment.apps/database   1/1     1            1           9m26s
+deployment.apps/frontend   5/5     5            5           9m26s
+
+NAME                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/backend-7c7f7cd67     2         2         2       9m27s
+replicaset.apps/database-744c9b6c68   1         1         1       9m26s
+replicaset.apps/frontend-7f67fff95c   5         5         5       9m26s
