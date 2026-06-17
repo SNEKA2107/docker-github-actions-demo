@@ -16,5 +16,27 @@ jobs:
       - name: Build Docker image
         run: docker build -t demo-app .
 
-      - name: Run container as a test
-        run: docker run --rm demo-app
+      - name: Start container
+        run: docker run -d --name demo-app -p 5000:5000 demo-app
+
+      - name: Test the application
+        run: |
+          echo "Waiting for the app to start..."
+          for i in $(seq 1 10); do
+            if curl -sf http://localhost:5000/health; then
+              echo "App is healthy"
+              break
+            fi
+            sleep 2
+            if [ "$i" -eq 10 ]; then
+              echo "App failed to start"
+              docker logs demo-app
+              exit 1
+            fi
+          done
+          echo "Checking the home page..."
+          curl -sf http://localhost:5000/ > /dev/null && echo "Home page OK"
+
+      - name: Stop container
+        if: always()
+        run: docker rm -f demo-app
